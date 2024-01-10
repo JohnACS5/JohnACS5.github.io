@@ -128,7 +128,7 @@ def lista_usuariosBD():
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
-                querySQL = "SELECT id_usuario, cedula, nombre_usuario, apellido_usuario, id_area, id_rol FROM usuarios"
+                querySQL = "SELECT id_usuario, cedula, nombre_usuario, apellido_usuario, id_area, id_rol, estado_civil, fecha_registro FROM usuarios"
                 cursor.execute(querySQL,)
                 usuariosBD = cursor.fetchall()
         return usuariosBD
@@ -148,19 +148,26 @@ def lista_areasBD():
         print(f"Error en lista_areas : {e}")
         return []
 
-# Eliminar usuario
 def eliminarUsuario(id):
     try:
         with connectionBD() as conexion_MySQLdb:
             with conexion_MySQLdb.cursor(dictionary=True) as cursor:
-                querySQL = "DELETE FROM usuarios WHERE id_usuario=%s"
-                cursor.execute(querySQL, (id,))
+                # Eliminar acceso asociado al usuario
+                querySQL_acceso = "DELETE FROM railway.accesos WHERE id_usuario = %s"
+                cursor.execute(querySQL_acceso, (id,))
                 conexion_MySQLdb.commit()
+
+                # Eliminar usuario
+                querySQL_usuario = "DELETE FROM railway.usuarios WHERE id_usuario = %s"
+                cursor.execute(querySQL_usuario, (id,))
+                conexion_MySQLdb.commit()
+
                 resultado_eliminar = cursor.rowcount
         return resultado_eliminar
     except Exception as e:
-        print(f"Error en eliminarUsuario : {e}")
-        return []    
+        print(f"Error en eliminarUsuario: {e}")
+        return []
+   
 
 def eliminarArea(id):
     try:

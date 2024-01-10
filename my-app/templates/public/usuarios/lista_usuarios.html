@@ -23,6 +23,8 @@
           <tr style="background-color: #ddd">
             <th>Cédula</th>
             <th>Nombre</th>
+            <th>Estado Civil</th>
+            <th>Fecha Registro</th>
             <th>Área</th>
             <th>Rol</th>
             <th>Acciones</th>
@@ -33,6 +35,8 @@
           <tr>
             <td>{{ usuario.cedula}}</td>
             <td>{{ usuario.nombre_usuario}} {{usuario.apellido_usuario}}</td> 
+            <td>{{ usuario.estado_civil}}</td>
+            <td>{{ usuario.fecha_registro}}</td>
             <td>
               {%for area in areas%}
               {%if area.id_area == usuario.id_area%}
